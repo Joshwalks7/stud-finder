@@ -1,7 +1,17 @@
-import "../HomePage.css";
+import type { SubmitEvent } from "react";
+import { useState } from "react";
+import "./HomePage.css";
 import heroImage from "../assets/hero-home.jpg";
 
 function HomePage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [submittedSearch, setSubmittedSearch] = useState("");
+
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmittedSearch(searchTerm.trim());
+  }
+
   return (
     <div className="home-page">
         <section
@@ -21,15 +31,21 @@ function HomePage() {
       <section className="search-area">
         <h2>Search LEGO Sets</h2>
 
-        <div className="search-controls">
+        <form className="search-controls" onSubmit={handleSubmit}>
           <input
             type="search"
             placeholder="Search by set name or number"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
           />
-          <button className="button" type="button">
+          <button className="button" type="submit">
             Search
           </button>
-        </div>
+        </form>
+
+        {submittedSearch && (
+          <p>Searching for: <strong>{submittedSearch}</strong></p>
+        )}
       </section>
     </div>
   );

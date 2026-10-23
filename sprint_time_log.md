@@ -31,9 +31,9 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |10/20/26  |8:10pm    |IM      |TypeScript YT vid and Gemini tutorial       |60           |
 |10/21/26  |10:15am   |TP      |Research Google Auth bug on mobile          |60           |
 |10/22/26  |10:00pm   |IM      |Plan, design, and initialize app with Codex |160          |
-|          |          |        |                                            |             |
-|          |          |        |                                            |             |
-|          |          |        |                                            |             |
+|10/23/26  |12:40am   |TP      |Create profile pic feature / fix storage bug|80           |
+|10/23/26  |10:15am   |MTG     |Fix expo go bug (sdk 58 update)             |60           |
+|10/23/26  |12:30pm   |IM      |Created initial search bar/button           |20           |
 |          |          |        |                                            |             |
 |          |          |        |                                            |             |
 
