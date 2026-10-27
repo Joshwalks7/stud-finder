@@ -34,8 +34,13 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |10/23/26  |12:40am   |TP      |Create profile pic feature / fix storage bug|80           |
 |10/23/26  |10:15am   |MTG     |Fix expo go bug (sdk 58 update)             |60           |
 |10/23/26  |12:30pm   |IM      |Created initial search bar/button           |20           |
+|10/26/26  |10:15am   |TP      |Connected users' posts to profile page      |60           |
+|10/26/26  |6:30pm    |TP      |Added follower/following feature with Search|60           |
+|10/27/26  |7:00am    |IM      |Created express server + connected API data |120          |
 |          |          |        |                                            |             |
 |          |          |        |                                            |             |
+|          |          |        |                                            |             |
+
 
 
 _Note: Add more rows as needed._
