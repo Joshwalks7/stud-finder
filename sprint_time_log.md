@@ -38,8 +38,9 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |10/26/26  |6:30pm    |TP      |Added follower/following feature with Search|60           |
 |10/27/26  |7:00am    |IM      |Created express server + connected API data |120          |
 |10/28/26  |10:15am   |MTG     |Showed off the demo for the class review    |60           |
-|10/30/26  |12:06am   |IM      |Created buttons to +/- from collection      |             |
-|          |          |        |                                            |             |
+|10/30/26  |12:06am   |IM      |Created buttons to +/- from collection      |60           |
+|10/30/26  |10:15am   |MTG     |Showcased personal projects                 |60           |
+|10/30/26  |3:30pm    |IM      |Finished wishlist/collection pages + docs   |120          |
 
 
 
@@ -49,7 +50,7 @@ _Note: Add more rows as needed._
 
 |Categroy                       |Total Time (Hours:Minutes)|
 |-------------------------------|:------------------------:|
-|IM - Individual Module         |                          |
-|TP - Team Project              |                          |
-|MTG - Class Meetings           |                          |
-|**TOTAL**                      |                          |
+|IM - Individual Module         |          10:00           |
+|TP - Team Project              |           4:20           |
+|MTG - Class Meetings           |           4:00           |
+|**TOTAL**                      |        **18:20**         |

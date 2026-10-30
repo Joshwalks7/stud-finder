@@ -116,6 +116,30 @@
         color: var(--color-text-muted);
         font-size: 0.9rem;
       }
+      .set-status {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+      }
+
+      .status-badge {
+        display: inline-block;
+        width: fit-content;
+        padding: 0.2rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .status-owned {
+        color: #166534;
+        background-color: #dcfce7;
+      }
+
+      .status-wishlisted {
+        color: #9a3412;
+        background-color: #ffedd5;
+      }
     }
   }
 }

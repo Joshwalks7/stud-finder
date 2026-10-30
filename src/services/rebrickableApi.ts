@@ -1,17 +1,36 @@
-import type { PaginatedResponse, RebrickableSet, } from "../types/rebrickable";
+import type {
+  PaginatedResponse,
+  RebrickableSet,
+} from "../types/rebrickable";
 
-export async function searchSets(searchTerm: string): Promise<PaginatedResponse<RebrickableSet>> {
-    const params = new URLSearchParams({
-        search: searchTerm,
-    });
+export class RebrickableApiError extends Error {
+  readonly status: number;
 
-    const response = await fetch(`/api/sets?${params.toString()}`);
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "RebrickableApiError";
+    this.status = status;
+  }
+}
 
-    if (!response.ok) {
-        throw new Error("Unable to serach Rebrickable sets.");
-    }
+export async function searchSets(
+  searchTerm: string,
+): Promise<PaginatedResponse<RebrickableSet>> {
+  const params = new URLSearchParams({
+    search: searchTerm,
+  });
 
-    const data: PaginatedResponse<RebrickableSet> = await response.json();
+  const response = await fetch(`/api/sets?${params.toString()}`);
 
-    return data;
+  if (!response.ok) {
+    throw new RebrickableApiError(
+      "Unable to search Rebrickable sets.",
+      response.status,
+    );
+  }
+
+  const data: PaginatedResponse<RebrickableSet> =
+    await response.json();
+
+  return data;
 }

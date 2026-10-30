@@ -3,6 +3,8 @@ import { useState } from "react";
 import heroImage from "../assets/hero-home.jpg";
 import { searchSets } from "../services/rebrickableApi";
 import { useCollection } from "../context/CollectionContext";
+import { useWishlist } from "../context/WishlistContext";
+import { createSetSummary } from "../utils/setSummary";
 import type { RebrickableSet } from "../types/rebrickable";
 import "./HomePage.css";
 
@@ -13,9 +15,14 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {
-  addToCollection,
-  isInCollection,
-} = useCollection();
+    addToCollection,
+    isInCollection,
+  } = useCollection();
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+  } = useWishlist();
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -92,6 +99,8 @@ function HomePage() {
           <div className="set-grid">
             {sets.map((set) => {
               const isOwned = isInCollection(set.set_num);
+              const isWishlisted = isInWishlist(set.set_num);
+              const [setNumber, setName, pieceCount] = createSetSummary(set);
 
               return (
                 <article className="set-card" key={set.set_num}>
@@ -100,10 +109,23 @@ function HomePage() {
                   )}
 
                   <div className="set-card-content">
-                    <h3>{set.name}</h3>
-                    <p>Set number: {set.set_num}</p>
+                    <div className="set-status">
+                      {isOwned && (
+                        <span className="status-badge status-owned">
+                          Owned
+                        </span>
+                      )}
+
+                      {isWishlisted && (
+                        <span className="status-badge status-wishlisted">
+                          Wishlisted
+                        </span>
+                      )}
+                    </div>
+                    <h3>{setName}</h3>
+                    <p>Set number: {setNumber}</p>
                     <p>Released: {set.year}</p>
-                    <p>Pieces: {set.num_parts}</p>
+                    <p>Pieces: {pieceCount}</p>
 
                     <button
                       className="button"
@@ -111,6 +133,20 @@ function HomePage() {
                       onClick={() => addToCollection(set)}
                     >
                       {isOwned ? "Add Another" : "Add to Collection"}
+                    </button>
+                    <button
+                      className="button"
+                      type="button"
+                      aria-pressed={isWishlisted}
+                      onClick={() =>
+                        isWishlisted
+                          ? removeFromWishlist(set.set_num)
+                          : addToWishlist(set)
+                      }
+                    >
+                      {isWishlisted
+                        ? "Remove from Wishlist"
+                        : "Add to Wishlist"}
                     </button>
                   </div>
                 </article>

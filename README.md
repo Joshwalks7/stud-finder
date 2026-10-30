@@ -1,75 +1,93 @@
-# React + TypeScript + Vite
+# Stud Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+I absolutely love collection and building LEGO! One thing I have always wanted was to have a digitalized accurate inventory of my sets and keep track of ones I want. I also love interacting with the Rebrickable API for LEGO data. This mobile app uses a React frontend built with TypeScript and a simple express backend.
 
-Currently, two official plugins are available:
+## Instructions for Build and Use
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Steps to install, build, and/or run the software:
 
-## React Compiler
+1. Install Node.js and npm.
+2. Clone or download this repository and open a terminal in the project folder.
+3. Install dependencies:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+   ```powershell
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+4. Create a `.env` file in the project root and add your Rebrickable API key:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+   ```env
+   REBRICKABLE_API_KEY=your_api_key_here
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+5. Start the backend in one terminal:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+   ```powershell
+   npm run server
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+6. Start the React development server in a second terminal:
 
-```
+   ```powershell
+   npm run dev
+   ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+7. Open the local URL shown by Vite, usually `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+8. To create a production build, run:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   ```powershell
+   npm run build
+   ```
 
-```
+9. To check the project with ESLint, run:
+
+   ```powershell
+   npm run lint
+   ```
+
+   
+
+Instructions for using the software:
+
+1. Search for LEGO sets by name or set number on the Home page.
+2. Add sets to My Collection or to the Wishlist.
+3. Open My Collection to increase quantities, decrease quantities, or remove sets.
+4. Open Wishlist to view saved sets, visit their Rebrickable pages, or remove them.
+5. Collection and wishlist data currently persist in the browser's local storage.
+
+## Development Environment
+
+* React
+* TypeScript
+* Vite
+* React Router
+* Express
+* Node.js and npm
+* Rebrickable API v3
+* ESLint
+
+The frontend runs on Vite and the backend runs on Express. The Express server keeps
+the Rebrickable API key out of the browser and forwards search requests to Rebrickable.
+The frontend communicates with the backend through the `/api` proxy configured in
+`vite.config.ts`.
+
+
+## Useful Websites to Learn More
+
+I found these websites useful in developing this software:
+
+* [w3schools Tutorial](https://www.w3schools.com/typescript/index.php)
+* [YouTube React Context Tutorial](https://youtu.be/HYKDUF8X3qI)
+
+## Future Work
+
+The following items I plan to fix, improve, and/or add to this project in the future:
+
+* [ ] Add database-backed persistence with AWS
+* [ ] Host the server and app on AWS Amplify
+* [ ] Add user authentication
+* [ ] Create the Explore feature
+* [ ] Calculate the percentage of a set that could be built from the collection's pieces
+* [ ] Add detailed set inventories and part-level collection tracking
+* [ ] Add purchase prices, notes, condition, and wishlist priorities
