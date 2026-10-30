@@ -37,8 +37,8 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |10/26/26  |10:15am   |TP      |Connected users' posts to profile page      |60           |
 |10/26/26  |6:30pm    |TP      |Added follower/following feature with Search|60           |
 |10/27/26  |7:00am    |IM      |Created express server + connected API data |120          |
-|          |          |        |                                            |             |
-|          |          |        |                                            |             |
+|10/28/26  |10:15am   |MTG     |Showed off the demo for the class review    |60           |
+|10/30/26  |12:06am   |IM      |Created buttons to +/- from collection      |             |
 |          |          |        |                                            |             |
 
 

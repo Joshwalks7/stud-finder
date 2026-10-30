@@ -2,6 +2,7 @@ import type { SubmitEvent } from "react";
 import { useState } from "react";
 import heroImage from "../assets/hero-home.jpg";
 import { searchSets } from "../services/rebrickableApi";
+import { useCollection } from "../context/CollectionContext";
 import type { RebrickableSet } from "../types/rebrickable";
 import "./HomePage.css";
 
@@ -11,6 +12,10 @@ function HomePage() {
   const [sets, setSets] = useState<RebrickableSet[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const {
+  addToCollection,
+  isInCollection,
+} = useCollection();
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -85,20 +90,32 @@ function HomePage() {
           <h2>Search Results</h2>
 
           <div className="set-grid">
-            {sets.map((set) => (
-              <article className="set-card" key={set.set_num}>
-                {set.set_img_url && (
-                  <img src={set.set_img_url} alt={set.name} />
-                )}
+            {sets.map((set) => {
+              const isOwned = isInCollection(set.set_num);
 
-                <div className="set-card-content">
-                  <h3>{set.name}</h3>
-                  <p>Set number: {set.set_num}</p>
-                  <p>Released: {set.year}</p>
-                  <p>Pieces: {set.num_parts}</p>
-                </div>
-              </article>
-            ))}
+              return (
+                <article className="set-card" key={set.set_num}>
+                  {set.set_img_url && (
+                    <img src={set.set_img_url} alt={set.name} />
+                  )}
+
+                  <div className="set-card-content">
+                    <h3>{set.name}</h3>
+                    <p>Set number: {set.set_num}</p>
+                    <p>Released: {set.year}</p>
+                    <p>Pieces: {set.num_parts}</p>
+
+                    <button
+                      className="button"
+                      type="button"
+                      onClick={() => addToCollection(set)}
+                    >
+                      {isOwned ? "Add Another" : "Add to Collection"}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
       )}
