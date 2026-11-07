@@ -9,15 +9,19 @@ import type { ReactNode } from "react";
 import type { RebrickableSet } from "../types/rebrickable";
 import type { CollectionItem } from "../types/collection";
 import {
-  loadCollection,
-  saveCollection,
-} from "../services/collectionStorage";
+  loadCollectionFromApi,
+  removeCollectionFromApi,
+  saveCollectionToApi,
+  updateCollectionQuantityInApi,
+} from "../services/collectionApi";
 
 interface CollectionContextValue {
   collection: CollectionItem[];
-  addToCollection: (set: RebrickableSet) => void;
-  decrementFromCollection: (setNum: string) => void;
-  removeFromCollection: (setNum: string) => void;
+  isLoading: boolean;
+  errorMessage: string | null;
+  addToCollection: (set: RebrickableSet) => Promise<void>;
+  decrementFromCollection: (setNum: string) => Promise<void>;
+  removeFromCollection: (setNum: string) => Promise<void>;
   isInCollection: (setNum: string) => boolean;
 }
 
@@ -32,52 +36,72 @@ interface CollectionProviderProps {
 export function CollectionProvider({
   children,
 }: CollectionProviderProps) {
-  const [collection, setCollection] = useState<CollectionItem[]>(
-    loadCollection,
-  );
+  const [collection, setCollection] = useState<CollectionItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    saveCollection(collection);
-  }, [collection]);
+    loadCollectionFromApi()
+      .then(setCollection)
+      .catch((error: unknown) => {
+        console.error("Unable to load collection:", error);
+        setErrorMessage("Unable to load your collection.");
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
-  function addToCollection(set: RebrickableSet): void {
+  async function addToCollection(set: RebrickableSet): Promise<void> {
+    const existingItem = collection.find(
+      (item) => item.set.set_num === set.set_num,
+    );
+    const item: CollectionItem = existingItem
+      ? { ...existingItem, quantity: existingItem.quantity + 1 }
+      : { set, quantity: 1, addedAt: new Date().toISOString() };
+
+    await saveCollectionToApi(item);
+
     setCollection((currentCollection) => {
-      const existingItem = currentCollection.find(
-        (item) => item.set.set_num === set.set_num,
+      const alreadyExists = currentCollection.some(
+        (currentItem) => currentItem.set.set_num === set.set_num,
       );
 
-      if (existingItem) {
-        return currentCollection.map((item) =>
-          item.set.set_num === set.set_num
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        );
-      }
-
-      return [
-        ...currentCollection,
-        {
-          set,
-          quantity: 1,
-          addedAt: new Date().toISOString(),
-        },
-      ];
+      return alreadyExists
+        ? currentCollection.map((currentItem) =>
+          currentItem.set.set_num === set.set_num ? item : currentItem,
+        )
+        : [...currentCollection, item];
     });
   }
 
-  function decrementFromCollection(setNum: string): void {
-    setCollection((currentCollection) =>
-      currentCollection
-        .map((item) =>
+  async function decrementFromCollection(setNum: string): Promise<void> {
+    const existingItem = collection.find(
+      (item) => item.set.set_num === setNum,
+    );
+
+    if (!existingItem) return;
+
+    const nextQuantity = existingItem.quantity - 1;
+
+    if (nextQuantity > 0) {
+      await updateCollectionQuantityInApi(setNum, nextQuantity);
+      setCollection((currentCollection) =>
+        currentCollection.map((item) =>
           item.set.set_num === setNum
-            ? { ...item, quantity: item.quantity - 1 }
+            ? { ...item, quantity: nextQuantity }
             : item,
-        )
-        .filter((item) => item.quantity > 0),
+        ),
+      );
+      return;
+    }
+
+    await removeCollectionFromApi(setNum);
+    setCollection((currentCollection) =>
+      currentCollection.filter((item) => item.set.set_num !== setNum),
     );
   }
 
-  function removeFromCollection(setNum: string): void {
+  async function removeFromCollection(setNum: string): Promise<void> {
+    await removeCollectionFromApi(setNum);
     setCollection((currentCollection) =>
       currentCollection.filter(
         (item) => item.set.set_num !== setNum,
@@ -95,6 +119,8 @@ export function CollectionProvider({
     <CollectionContext.Provider
       value={{
         collection,
+        isLoading,
+        errorMessage,
         addToCollection,
         decrementFromCollection,
         removeFromCollection,

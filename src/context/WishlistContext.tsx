@@ -9,14 +9,17 @@ import type { ReactNode } from "react";
 import type { RebrickableSet } from "../types/rebrickable";
 import type { WishlistItem } from "../types/wishlist";
 import {
-  loadWishlist,
-  saveWishlist,
-} from "../services/wishlistStorage";
+  loadWishlistFromApi,
+  removeWishlistFromApi,
+  saveWishlistToApi,
+} from "../services/wishlistApi";
 
 interface WishlistContextValue {
   wishlist: WishlistItem[];
-  addToWishlist: (set: RebrickableSet) => void;
-  removeFromWishlist: (setNum: string) => void;
+  isLoading: boolean;
+  errorMessage: string | null;
+  addToWishlist: (set: RebrickableSet) => Promise<void>;
+  removeFromWishlist: (setNum: string) => Promise<void>;
   isInWishlist: (setNum: string) => boolean;
 }
 
@@ -31,35 +34,38 @@ interface WishlistProviderProps {
 export function WishlistProvider({
   children,
 }: WishlistProviderProps) {
-  const [wishlist, setWishlist] = useState<WishlistItem[]>(
-    loadWishlist,
-  );
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    saveWishlist(wishlist);
-  }, [wishlist]);
+    loadWishlistFromApi()
+      .then(setWishlist)
+      .catch((error: unknown) => {
+        console.error("Unable to load wishlist:", error);
+        setErrorMessage("Unable to load your wishlist.");
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
-  function addToWishlist(set: RebrickableSet): void {
-    setWishlist((currentWishlist) => {
-      const alreadyExists = currentWishlist.some(
-        (item) => item.set.set_num === set.set_num,
-      );
+  async function addToWishlist(set: RebrickableSet): Promise<void> {
+    const alreadyExists = wishlist.some(
+      (item) => item.set.set_num === set.set_num,
+    );
 
-      if (alreadyExists) {
-        return currentWishlist;
-      }
+    if (alreadyExists) return;
 
-      return [
-        ...currentWishlist,
-        {
-          set,
-          addedAt: new Date().toISOString(),
-        },
-      ];
-    });
+    const item: WishlistItem = {
+      set,
+      addedAt: new Date().toISOString(),
+    };
+
+    await saveWishlistToApi(item);
+    setWishlist((currentWishlist) => [...currentWishlist, item]);
   }
 
-  function removeFromWishlist(setNum: string): void {
+  async function removeFromWishlist(setNum: string): Promise<void> {
+    await removeWishlistFromApi(setNum);
     setWishlist((currentWishlist) =>
       currentWishlist.filter(
         (item) => item.set.set_num !== setNum,
@@ -77,6 +83,8 @@ export function WishlistProvider({
     <WishlistContext.Provider
       value={{
         wishlist,
+        isLoading,
+        errorMessage,
         addToWishlist,
         removeFromWishlist,
         isInWishlist,

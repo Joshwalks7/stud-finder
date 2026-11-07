@@ -2,7 +2,30 @@ import { useWishlist } from "../context/WishlistContext";
 import "./WishlistPage.css";
 
 function WishlistPage() {
-    const { wishlist, removeFromWishlist } = useWishlist();
+    const {
+        wishlist,
+        isLoading,
+        errorMessage,
+        removeFromWishlist,
+    } = useWishlist();
+
+    if (isLoading) {
+        return (
+            <div className="wishlist-page status-message" role="status">
+                <h2>Wishlist</h2>
+                <p>Loading your wishlist...</p>
+            </div>
+        );
+    }
+
+    if (errorMessage) {
+        return (
+            <div className="wishlist-page status-message error-message" role="alert">
+                <h2>Wishlist</h2>
+                <p>{errorMessage}</p>
+            </div>
+        );
+    }
 
     if (wishlist.length === 0) {
         return (

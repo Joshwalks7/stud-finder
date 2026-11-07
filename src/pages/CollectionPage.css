@@ -55,6 +55,16 @@
   }
 }
 
+.status-message {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.error-message {
+  color: var(--color-primary-dark);
+}
+
 @media (min-width: 640px) {
   .collection-page {
     .collection-card {

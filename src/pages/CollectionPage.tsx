@@ -4,10 +4,30 @@ import "./CollectionPage.css";
 function CollectionPage() {
   const {
     collection,
+    isLoading,
+    errorMessage,
     addToCollection,
     decrementFromCollection,
     removeFromCollection,
   } = useCollection();
+
+  if (isLoading) {
+    return (
+      <div className="collection-page status-message" role="status">
+        <h2>My Collection</h2>
+        <p>Loading your collection...</p>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="collection-page status-message error-message" role="alert">
+        <h2>My Collection</h2>
+        <p>{errorMessage}</p>
+      </div>
+    );
+  }
 
   if (collection.length === 0) {
     return (
