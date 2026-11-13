@@ -1,8 +1,8 @@
 # CSE 310 - Sprint Time Log
 
-Name:
+Name: Joshua Walker
 
-Sprint #:
+Sprint #: 4
 
 ## Instructions
 
@@ -36,6 +36,9 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |11/9/26   |10:15am   |TP      |Worked with Paige on UX/UI consultation     |60           |
 |11/10/26  |8:30pm    |TP      |Fixed bugs and created PowerPoint           |60           |
 |11/10/26  |9:30pm    |IM      |Diagnosed Beanstalk bug and began Cognito   |128          |
+|11/11/26  |10:15am   |MTG     |Present sprint to class!                    |60           |
+|11/12/26  |1:40pm    |IM      |Finished authentication and database bugs   |210          |
+|11/13/26  |10:15am   |MTG     |Reviewed others' projects and presented mine|60           |
 
 _Note: Add more rows as needed._
 
@@ -43,7 +46,7 @@ _Note: Add more rows as needed._
 
 |Categroy                       |Total Time (Hours:Minutes)|
 |-------------------------------|:------------------------:|
-|IM - Individual Module         |                          |
-|TP - Team Project              |                          |
-|MTG - Class Meetings           |                          |
-|**TOTAL**                      |                          |
+|IM - Individual Module         |          10:43           |
+|TP - Team Project              |           4:00           |
+|MTG - Class Meetings           |           4:00           |
+|**TOTAL**                      |          18:43           |
