@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import CollectionPage from "./pages/CollectionPage";
 import WishlistPage from "./pages/WishlistPage";
 import ExplorePage from "./pages/ExplorePage";
+import AuthPage from "./pages/AuthPage";
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Link to="/collection">My Collection</Link>
         <Link to="/wishlist">Wishlist</Link>
         <Link to="/explore">Explore</Link>
+        <Link to="/account">Account</Link>
       </nav>
       <section className="page-content">
         <Routes>
@@ -25,6 +27,7 @@ function App() {
           <Route path="/collection" element={<CollectionPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/account" element={<AuthPage />} />
         </Routes>
       </section>
     </main>

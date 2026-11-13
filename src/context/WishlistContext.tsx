@@ -13,6 +13,7 @@ import {
   removeWishlistFromApi,
   saveWishlistToApi,
 } from "../services/wishlistApi";
+import { useAuth } from "../hooks/useAuth";
 
 interface WishlistContextValue {
   wishlist: WishlistItem[];
@@ -34,11 +35,18 @@ interface WishlistProviderProps {
 export function WishlistProvider({
   children,
 }: WishlistProviderProps) {
+  const { user, isLoading: isAuthLoading } = useAuth();
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (isAuthLoading) return;
+
+    if (!user) {
+      return;
+    }
+
     loadWishlistFromApi()
       .then(setWishlist)
       .catch((error: unknown) => {
@@ -46,7 +54,7 @@ export function WishlistProvider({
         setErrorMessage("Unable to load your wishlist.");
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [isAuthLoading, user]);
 
   async function addToWishlist(set: RebrickableSet): Promise<void> {
     const alreadyExists = wishlist.some(
@@ -82,9 +90,9 @@ export function WishlistProvider({
   return (
     <WishlistContext.Provider
       value={{
-        wishlist,
-        isLoading,
-        errorMessage,
+        wishlist: user ? wishlist : [],
+        isLoading: isAuthLoading || (user !== null && isLoading),
+        errorMessage: user ? errorMessage : null,
         addToWishlist,
         removeFromWishlist,
         isInWishlist,

@@ -33,6 +33,9 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |11/5/26   |11:00pm   |TP      |Added profile public page + AGENT.md file   |60           |
 |11/6/26   |10:15am   |MTG     |Added outfit logger in app                  |60           |
 |11/7/26   |12:30pm   |IM      |Created DynamoDB tables and Beanstalk deploy|150          |
+|11/9/26   |10:15am   |TP      |Worked with Paige on UX/UI consultation     |60           |
+|11/10/26  |8:30pm    |TP      |Fixed bugs and created PowerPoint           |60           |
+|11/10/26  |9:30pm    |IM      |Diagnosed Beanstalk bug and began Cognito   |128          |
 
 _Note: Add more rows as needed._
 

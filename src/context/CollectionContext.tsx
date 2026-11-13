@@ -14,6 +14,7 @@ import {
   saveCollectionToApi,
   updateCollectionQuantityInApi,
 } from "../services/collectionApi";
+import { useAuth } from "../hooks/useAuth";
 
 interface CollectionContextValue {
   collection: CollectionItem[];
@@ -36,11 +37,18 @@ interface CollectionProviderProps {
 export function CollectionProvider({
   children,
 }: CollectionProviderProps) {
+  const { user, isLoading: isAuthLoading } = useAuth();
   const [collection, setCollection] = useState<CollectionItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (isAuthLoading) return;
+
+    if (!user) {
+      return;
+    }
+
     loadCollectionFromApi()
       .then(setCollection)
       .catch((error: unknown) => {
@@ -48,7 +56,7 @@ export function CollectionProvider({
         setErrorMessage("Unable to load your collection.");
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [isAuthLoading, user]);
 
   async function addToCollection(set: RebrickableSet): Promise<void> {
     const existingItem = collection.find(
@@ -118,9 +126,9 @@ export function CollectionProvider({
   return (
     <CollectionContext.Provider
       value={{
-        collection,
-        isLoading,
-        errorMessage,
+        collection: user ? collection : [],
+        isLoading: isAuthLoading || (user !== null && isLoading),
+        errorMessage: user ? errorMessage : null,
         addToCollection,
         decrementFromCollection,
         removeFromCollection,

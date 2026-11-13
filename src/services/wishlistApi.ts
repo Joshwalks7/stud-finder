@@ -1,10 +1,18 @@
 import type { WishlistItem } from "../types/wishlist";
+import { getCurrentAccessToken } from "./cognito";
 
 async function request<T>(
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<T> {
-  const response = await fetch(input, init);
+  const headers = new Headers(init?.headers);
+  const accessToken = await getCurrentAccessToken();
+
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const response = await fetch(input, { ...init, headers });
 
   if (!response.ok) {
     throw new Error("Unable to communicate with the wishlist API.");
