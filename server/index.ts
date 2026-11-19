@@ -68,6 +68,37 @@ app.get("/api/sets", async (request, response) => {
         }
 });
 
+app.get("/api/sets/:setNum/parts", async (request, response) => {
+    const setNum = request.params.setNum.trim();
+
+    if (!setNum) {
+        response.status(400).json({ message: "A set number is required." });
+        return;
+    }
+
+    const url = new URL(
+        `https://rebrickable.com/api/v3/lego/sets/${encodeURIComponent(setNum)}/parts/`,
+    );
+
+    url.searchParams.set("page_size", "100");
+
+    try {
+        const rebrickableResponse = await fetch(url, {
+            headers: {
+                Authorization: `key ${apiKey}`,
+            },
+        });
+
+        const data: unknown = await rebrickableResponse.json();
+
+        response.status(rebrickableResponse.status).json(data);
+    } catch {
+        response.status(500).json({
+            message: "Unable to retrieve the set inventory from Rebrickable.",
+        });
+    }
+});
+
 app.get("/api/collection", requireAuth, async (_request, response) => {
     try {
         response.json(await listCollection(getAuthenticatedUserId(response)));
