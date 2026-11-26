@@ -31,7 +31,11 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |11/17/26  |5:00pm    |IM      |Created coordinator, architect, front agents|60           |
 |11/18/26  |10:15am   |TP      |Discussed spint 5 sprint goals and bugs     |60           |
 |11/18/26  |6:27pm    |IM      |Created three new agents and began  explore |60           |
-|          |          |        |                                            |             |
+|11/20/26  |10:15am   |MTG     |Merged new UI and began investing AI feature|60           |
+|11/21/26  |7:40pm    |TP      |Researched AI implementation                |35           |
+|11/23/26  |10:15am   |TP      |Created Gemini API key and began developm...|60           |
+|11/25/26  |1:39pm    |IM      |Experimented with AI analysis w/ Gemini Key |105          |
+|11/25/26  |7:50pm    |IM      |Created features page with agent assistance |65           |
 
 _Note: Add more rows as needed._
 

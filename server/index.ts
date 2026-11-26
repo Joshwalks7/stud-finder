@@ -6,6 +6,11 @@ import type { CollectionItem } from "../src/types/collection";
 import type { WishlistItem } from "../src/types/wishlist";
 import { getAuthenticatedUserId, requireAuth } from "./auth";
 import {
+    aggregateCollectionParts,
+    compareInventories,
+    loadBuildableSetParts,
+} from "./inventory";
+import {
     listCollection,
     listWishlist,
     removeCollectionItem,
@@ -76,26 +81,43 @@ app.get("/api/sets/:setNum/parts", async (request, response) => {
         return;
     }
 
-    const url = new URL(
-        `https://rebrickable.com/api/v3/lego/sets/${encodeURIComponent(setNum)}/parts/`,
-    );
-
-    url.searchParams.set("page_size", "100");
-
     try {
-        const rebrickableResponse = await fetch(url, {
-            headers: {
-                Authorization: `key ${apiKey}`,
-            },
+        const buildableResults = await loadBuildableSetParts(setNum, apiKey);
+
+        response.json({
+            count: buildableResults.length,
+            page_size: 100,
+            next: null,
+            previous: null,
+            results: buildableResults,
         });
-
-        const data: unknown = await rebrickableResponse.json();
-
-        response.status(rebrickableResponse.status).json(data);
     } catch {
         response.status(500).json({
             message: "Unable to retrieve the set inventory from Rebrickable.",
         });
+    }
+});
+
+app.get("/api/sets/:setNum/buildability", requireAuth, async (request, response) => {
+    const setNum = request.params.setNum.trim();
+
+    if (!setNum) {
+        response.status(400).json({ message: "A target set number is required." });
+        return;
+    }
+
+    try {
+        const collection = await listCollection(getAuthenticatedUserId(response));
+        const availableInventory = await aggregateCollectionParts(
+            collection,
+            (ownedSetNum) => loadBuildableSetParts(ownedSetNum, apiKey),
+        );
+        const targetParts = await loadBuildableSetParts(setNum, apiKey);
+
+        response.json(compareInventories(availableInventory, targetParts));
+    } catch (error) {
+        console.error("Buildability comparison error:", error);
+        response.status(500).json({ message: "Unable to calculate set buildability." });
     }
 });
 

@@ -12,13 +12,17 @@ export interface RebrickablePartDetails {
     part_num: string;
     name: string;
     part_cat_id: number;
+    part_url: string;
     part_img_url: string | null;
+    external_ids: Record<string, string[]>;
 }
 
 export interface RebrickableColorDetails {
     id: number;
     name: string;
     rgb: string;
+    is_trans: boolean;
+    external_ids: Record<string, unknown>;
 }
 
 export interface RebrickableInventoryPart {
@@ -32,6 +36,7 @@ export interface RebrickableInventoryPart {
 
 export interface PaginatedResponse<T> {
     count: number;
+    page_size: number;
     next: string | null;
     previous: string | null;
     results: T[];

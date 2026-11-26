@@ -1,4 +1,5 @@
 import type { SubmitEvent } from "react";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import heroImage from "../assets/hero-home.jpg";
 import { searchSets } from "../services/rebrickableApi";
@@ -101,7 +102,6 @@ function HomePage() {
               const isOwned = isInCollection(set.set_num);
               const isWishlisted = isInWishlist(set.set_num);
               const [setNumber, setName, pieceCount] = createSetSummary(set);
-
               return (
                 <article className="set-card" key={set.set_num}>
                   {set.set_img_url && (
@@ -126,6 +126,13 @@ function HomePage() {
                     <p>Set number: {setNumber}</p>
                     <p>Released: {set.year}</p>
                     <p>Pieces: {pieceCount}</p>
+
+                    <Link
+                      className="explore-link"
+                      to={`/explore?set=${encodeURIComponent(set.set_num)}`}
+                    >
+                      Explore missing parts
+                    </Link>
 
                     <button
                       className="button"
